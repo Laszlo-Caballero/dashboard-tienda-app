@@ -18,18 +18,13 @@ import {
   TableRow,
   Alert,
 } from '@mui/material';
-import { Send, PhoneAndroid, Devices, AddCircle } from '@mui/icons-material';
+import { Send, PhoneAndroid, Devices } from '@mui/icons-material';
 
 export const NotificationsDashboard: React.FC = () => {
   const [tokens, setTokens] = useState<FCMToken[]>([]);
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-
-  // Register Token Form
-  const [newToken, setNewToken] = useState('');
-  const [newPlatform, setNewPlatform] = useState('android');
-  const [registering, setRegistering] = useState(false);
 
   // Send Notification Form
   const [pushTitle, setPushTitle] = useState('');
@@ -55,26 +50,7 @@ export const NotificationsDashboard: React.FC = () => {
     fetchTokens();
   }, []);
 
-  const handleRegisterToken = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newToken) return;
 
-    setRegistering(true);
-    setErrorMsg('');
-    setSuccessMsg('');
-    try {
-      const res = await api.notifications.registerToken(newToken, newPlatform);
-      if (res.status === 'success') {
-        setSuccessMsg('¡Dispositivo registrado exitosamente para notificaciones push!');
-        setNewToken('');
-        fetchTokens();
-      }
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Error al registrar token de dispositivo.');
-    } finally {
-      setRegistering(false);
-    }
-  };
 
   const handleSendPush = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,7 +71,7 @@ export const NotificationsDashboard: React.FC = () => {
         setPushBody('');
       }
     } catch (err: any) {
-      setErrorMsg(err.message || 'Error al simular envío push.');
+      setErrorMsg(err.message || 'Error al enviar la notificación push.');
     } finally {
       setSendingPush(false);
     }
@@ -115,50 +91,8 @@ export const NotificationsDashboard: React.FC = () => {
       )}
 
       <Grid container spacing={3}>
-        {/* Left Side: Register Token & Token List */}
+        {/* Left Side: Token List */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-            Registrar Token FCM del Dispositivo
-          </Typography>
-
-          <Paper component="form" onSubmit={handleRegisterToken} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
-            <TextField
-              label="Token FCM de Firebase"
-              fullWidth
-              size="small"
-              placeholder="Ej. fcm_token_device_unique_string..."
-              value={newToken}
-              onChange={(e) => setNewToken(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-            <Grid container spacing={2} sx={{ mb: 2 }}>
-              <Grid size={{ xs: 8 }}>
-                <TextField
-                  select
-                  label="Plataforma de Dispositivo"
-                  fullWidth
-                  size="small"
-                  value={newPlatform}
-                  onChange={(e) => setNewPlatform(e.target.value)}
-                >
-                  <MenuItem value="android">Android</MenuItem>
-                  <MenuItem value="ios">iOS / Apple</MenuItem>
-                  <MenuItem value="web">Web Browser</MenuItem>
-                </TextField>
-              </Grid>
-              <Grid size={{ xs: 4 }} sx={{ display: 'flex', alignItems: 'center' }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  startIcon={<AddCircle />}
-                  disabled={registering || !newToken}
-                >
-                  Registrar
-                </Button>
-              </Grid>
-            </Grid>
-          </Paper>
 
           <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
             <Devices /> Dispositivos Registrados ({tokens.length})
@@ -207,7 +141,7 @@ export const NotificationsDashboard: React.FC = () => {
         {/* Right Side: Push simulation panel */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-            Simulador de Envío de Notificaciones Push
+            Envío de Notificaciones Push
           </Typography>
 
           <Paper component="form" onSubmit={handleSendPush} sx={{ p: 3, borderRadius: 2 }}>
@@ -260,7 +194,7 @@ export const NotificationsDashboard: React.FC = () => {
               startIcon={<Send />}
               disabled={sendingPush || !pushTitle || !pushBody}
             >
-              {sendingPush ? <CircularProgress size={24} color="inherit" /> : 'Enviar/Simular Notificación Push'}
+              {sendingPush ? <CircularProgress size={24} color="inherit" /> : 'Enviar Notificación Push'}
             </Button>
           </Paper>
         </Grid>

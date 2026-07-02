@@ -443,7 +443,7 @@ export const api = {
         headers: getHeaders(true),
         body: JSON.stringify({ title, body, token })
       });
-      if (!res.ok) throw new Error('Error al simular envío de notificación push');
+      if (!res.ok) throw new Error('Error al enviar la notificación push');
       return res.json();
     }
   },

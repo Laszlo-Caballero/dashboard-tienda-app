@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "react-router": {
+      "source": "remix-run/react-router",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/react-router/SKILL.md",
+      "computedHash": "38cfa0037d15717ebcaa412b9cb950941564b5f658b40344652ef6634a28dd28"
+    }
+  }
+}

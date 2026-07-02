@@ -222,7 +222,7 @@ export const PromotionsDashboard: React.FC = () => {
 
       <Tabs
         value={activeTab}
-        onChange={(e, v) => setActiveTab(v as 'standard' | 'surprise')}
+        onChange={(_e, v) => setActiveTab(v as 'standard' | 'surprise')}
         sx={{ mb: 3, borderBottom: 1, borderColor: 'divider' }}
       >
         <Tab label="Promociones Oficiales" value="standard" />

@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "80"
+      - "3000"
     environment:
       - VITE_API_BASE_URL=https://api-app.up0fay.easypanel.host
     restart: always

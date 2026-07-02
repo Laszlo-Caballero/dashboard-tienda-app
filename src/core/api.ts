@@ -292,6 +292,33 @@ export const api = {
       return resData.data || [];
     },
 
+    getById: async (storeId: number): Promise<Store> => {
+      const res = await fetch(`${BASE_URL}/api/stores/${storeId}`);
+      if (!res.ok) throw new Error('Error al obtener tienda');
+      const resData = await res.json();
+      return resData.data;
+    },
+
+    create: async (data: { nombre: string; latitud?: number; longitud?: number; ancho?: number; alto?: number }): Promise<{ status: string; message: string; data: Store }> => {
+      const res = await fetch(`${BASE_URL}/api/stores/`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error('Error al crear tienda');
+      return res.json();
+    },
+
+    update: async (storeId: number, data: { nombre?: string; latitud?: number; longitud?: number; ancho?: number; alto?: number }): Promise<{ status: string; message: string; data: Store }> => {
+      const res = await fetch(`${BASE_URL}/api/stores/${storeId}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error('Error al actualizar tienda');
+      return res.json();
+    },
+
     updateLocation: async (storeId: number, latitud: number, longitud: number): Promise<{ status: string; message: string; data: Store }> => {
       const res = await fetch(`${BASE_URL}/api/stores/${storeId}/location`, {
         method: 'PATCH',
@@ -299,6 +326,15 @@ export const api = {
         body: JSON.stringify({ latitud, longitud })
       });
       if (!res.ok) throw new Error('Error al actualizar ubicación de la tienda');
+      return res.json();
+    },
+
+    delete: async (storeId: number): Promise<{ status: string; message: string }> => {
+      const res = await fetch(`${BASE_URL}/api/stores/${storeId}`, {
+        method: 'DELETE',
+        headers: getHeaders(true),
+      });
+      if (!res.ok) throw new Error('Error al eliminar tienda');
       return res.json();
     }
   },
